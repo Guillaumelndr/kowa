@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { firebaseContext } from '../../context/firebase'
 import Loader from '../loader'
-import { Button } from 'antd'
+import { Button, Table } from 'antd'
+import { columns } from './columns'
 
 const ClientsList = () => {
+  const pageSize = 200
   const [clients, setClients] = useState(null)
   const [latestDoc, setLatestDoc] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -34,16 +36,13 @@ const ClientsList = () => {
     !clients && getNextPage()
   }, [])
 
-
   return (
     <>
       {
         clients
-          ? clients.map(client => <p key={client.id}>{client.nom}</p>)
+          ? <Table columns={columns} dataSource={clients} loading={loading} rowKey="id" size="small" />
           : <Loader />
       }
-      {!eof && <Button disabled={!clients} onClick={getNextPage} loading={loading}>Load More</Button>}
-
     </>
   )
 }
