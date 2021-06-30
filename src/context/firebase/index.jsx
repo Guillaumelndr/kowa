@@ -30,7 +30,8 @@ const FirebaseProvider = ({ children }) => {
     signIn: (password) => firebase.auth().signInWithEmailAndPassword(email, password),
     signOut: () => firebase.auth().signOut(),
     getUserToken: () => firebase.auth().currentUser.getIdToken(),
-    clients: () => db.collection("clients")
+    clients: () => db.collection("clients"),
+    setClient: (uuid, data) => db.collection("clients").doc(uuid).set(data)
   }
 
 

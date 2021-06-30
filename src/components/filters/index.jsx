@@ -21,7 +21,7 @@ const Filters = ({ onSearch, onTypeChange }) => {
           <Option value="téléphone">Téléphone</Option>
           <Option value="email">Email</Option>
         </Select>
-        <Search placeholder={`Rechercher par ${type}`} style={{ width: 250 }} onSearch={q => onSearch({ q, type })} />
+        <Search placeholder={`Rechercher par ${type}`} style={{ width: 250 }} onSearch={q => onSearch({ q, type })} allowClear />
       </Input.Group>
     </div>
   )

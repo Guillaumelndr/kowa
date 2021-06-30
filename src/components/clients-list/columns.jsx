@@ -1,6 +1,7 @@
 import React from 'react'
 import { Space, Typography } from "antd"
 import _ from 'lodash'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 const { Text, Link } = Typography
 
@@ -15,8 +16,8 @@ export const columns = [
     key: 'name',
     render: ({ tel_dom, tel_port }) => (
       <Space>
-        {tel_port && <Link href="https://ant.design" target="_blank">{tel_port}</Link>}
-        {tel_dom && <Link href="https://ant.design" target="_blank">{tel_dom}</Link>}
+        {tel_port && <CopyToClipboard text={tel_port.toString()}><Link href="https://messageriepro3.orange.fr/OFX#mail/SF_INBOX" target="_blank">{tel_port}</Link></CopyToClipboard>}
+        {tel_dom && <CopyToClipboard text={tel_dom.toString()}><Link href="https://messageriepro3.orange.fr/OFX#mail/SF_INBOX" target="_blank">{tel_dom}</Link></CopyToClipboard>}
       </Space>
 
     )
@@ -24,6 +25,6 @@ export const columns = [
   {
     title: 'Email',
     key: 'name',
-    render: ({ mail }) => <Text strong>{mail}</Text>
+    render: ({ mail }) => <Link href={`mailto:${mail.replace(';', '')}`}><Text strong>{mail}</Text></Link>
   }
 ]

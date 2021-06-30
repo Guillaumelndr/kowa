@@ -8,8 +8,9 @@ import _ from 'lodash'
 const clientFilters = (clients, query) => {
   return _.filter(clients, client => {
     if (query.q === null) return true
-    const compare = key => _.includes(client[key].toLowerCase(), query.q.toLowerCase())
+    const compare = key => _.includes(client[key]?.toLowerCase(), query.q.toLowerCase())
     if (query.type === 'email') return compare('mail')
+    if (query.type === 'téléphone') return compare('tel_dom') || compare('tel_port')
     return compare('nom') || compare('prenom')
   })
 }
@@ -23,8 +24,6 @@ const ClientsList = ({ query }) => {
   const { api } = useContext(firebaseContext)
 
   // index.saveObject(clients)
-
-  console.log(_.includes('salut les amis', 'iS'))
 
   const getNextPage = () => {
     // if (eof) return
