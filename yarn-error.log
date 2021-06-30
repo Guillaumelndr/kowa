@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\yarn\bin\yarn.js add lodash
+  C:\Program Files\nodejs\node.exe C:\yarn\bin\yarn.js add use-query-params query-string
 
 PATH: 
   C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Dev\bin;C:\Program Files\nodejs;C:\Program Files\Symfony;C:\yarn\bin;C:\Program Files\nodejs;C:\MinGW\bin;C:\php;C:\ProgramData\ComposerSetup\bin;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\Dev\AppData\Local\Microsoft\WindowsApps;E:\Users\Dev\Microsoft VS Code\bin

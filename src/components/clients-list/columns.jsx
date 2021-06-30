@@ -24,6 +24,6 @@ export const columns = [
   {
     title: 'Email',
     key: 'name',
-    render: ({ nom, prenom }) => <Space size={6}><Text strong>{nom.toUpperCase()}</Text><Text>{_.capitalize(prenom)}</Text></Space>
+    render: ({ mail }) => <Text strong>{mail}</Text>
   }
 ]
