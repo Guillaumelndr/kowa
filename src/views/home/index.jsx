@@ -10,11 +10,16 @@ const Home = () => {
   const [query, setQuery] = useState({
     q: null,
     type: 'patient',
+    favoris: false,
   })
 
   return (
     <>
-      <Filters onSearch={setQuery} onTypeChange={type => setQuery({ ...query, type })} />
+      <Filters
+        onSearch={q => setQuery({ ...query, q })}
+        onTypeChange={type => setQuery({ ...query, type })}
+        onSwitchChange={favoris => setQuery({ ...query, favoris })}
+      />
       <AddClient />
       <ClientsList query={query} />
     </>

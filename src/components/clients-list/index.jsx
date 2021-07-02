@@ -6,13 +6,15 @@ import { columns } from './columns'
 import _ from 'lodash'
 
 const clientFilters = (clients, query) => {
-  return _.filter(clients, client => {
-    if (query.q === null) return true
+  console.log(query)
+  const filter = _.filter(clients, client => {
+    if (query.q === null || query.q === '') return true
     const compare = key => _.includes(client[key]?.toLowerCase(), query.q.toLowerCase())
     if (query.type === 'email') return compare('mail')
     if (query.type === 'téléphone') return compare('tel_dom') || compare('tel_port')
     return compare('nom') || compare('prenom')
   })
+  return query.favoris ? _.filter(filter, client => !!client?.favoris === query.favoris) : filter
 }
 
 const ClientsList = ({ query }) => {
@@ -25,7 +27,7 @@ const ClientsList = ({ query }) => {
 
   // index.saveObject(clients)
 
-  const getNextPage = () => {
+  const getClient = () => {
     // if (eof) return
     setLoading(true)
     api.clients()
@@ -49,17 +51,12 @@ const ClientsList = ({ query }) => {
   }
 
   useEffect(() => {
-    !clients && getNextPage()
-  }, [])
+    getClient()
+  }, [query])
+
 
   return (
-    <>
-      {
-        clients
-          ? <Table columns={columns} dataSource={clientFilters(clients, query)} loading={loading} rowKey="id" size="small" />
-          : <Loader />
-      }
-    </>
+    <Table columns={columns} dataSource={clientFilters(clients, query)} loading={loading} rowKey="id" size="small" />
   )
 }
 

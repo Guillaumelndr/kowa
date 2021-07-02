@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Input, Select } from 'antd'
-import { css } from '@emotion/css'
+import { Input, Select, Switch, Space, Tooltip } from 'antd'
+import { css, cx } from '@emotion/css'
+
+import { StarOutlined, StarFilled } from '@ant-design/icons'
 
 const { Search } = Input
 const { Option } = Select
 
-const Filters = ({ onSearch, onTypeChange }) => {
+const Filters = ({ onSearch, onTypeChange, onSwitchChange }) => {
   const [type, setType] = useState('patient')
 
   const handleChangeType = t => {
@@ -14,15 +16,24 @@ const Filters = ({ onSearch, onTypeChange }) => {
   }
 
   return (
-    <div className={css`width: 400px;`}>
-      <Input.Group compact>
-        <Select style={{ width: 150 }} defaultValue={type} onChange={handleChangeType}>
-          <Option value="patient">Patient</Option>
-          <Option value="téléphone">Téléphone</Option>
-          <Option value="email">Email</Option>
-        </Select>
-        <Search placeholder={`Rechercher par ${type}`} style={{ width: 250 }} onSearch={q => onSearch({ q, type })} allowClear />
-      </Input.Group>
+    <div className={cx('center', css`width: 100%`)}>
+      <Space className={css`width: fit-content;`} align="center">
+        <Input.Group compact>
+          <Select style={{ width: 150 }} defaultValue={type} onChange={handleChangeType}>
+            <Option value="patient">Patient</Option>
+            <Option value="téléphone">Téléphone</Option>
+            <Option value="email">Email</Option>
+          </Select>
+          <Search placeholder={`Rechercher par ${type}`} style={{ width: 250 }} onSearch={q => onSearch(q)} allowClear />
+        </Input.Group>
+        <Tooltip placement="bottom" title="favoris">
+          <Switch
+            checkedChildren={<StarFilled />}
+            unCheckedChildren={<StarOutlined />}
+            onChange={onSwitchChange}
+          />
+        </Tooltip>
+      </Space>
     </div>
   )
 }
