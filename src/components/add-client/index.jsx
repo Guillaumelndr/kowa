@@ -4,28 +4,35 @@ import { PlusCircleOutlined } from '@ant-design/icons'
 import { firebaseContext } from '../../context/firebase'
 
 import { v4 as uuidv4 } from 'uuid'
+import { clientsContext } from '../../context/clients'
 
 const AddClient = () => {
   const { api } = useContext(firebaseContext)
+  const { dispatch } = useContext(clientsContext)
 
   const [openModal, setOpenModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
+
   const handleSubmit = data => {
     setLoading(true)
-    api.setClient(
-      uuidv4(),
-      {
+    const client = {
+      id: uuidv4(),
+      data: {
         nom: data.nom,
         prenom: data.prenom,
         tel_dom: data?.tel_dom || '',
         tel_port: data?.tel_port || '',
         mail: data?.mail || ''
       }
-    )
-      .then(() => setOpenModal(false))
+    }
+    api.setClient(client.id, client.data)
+      .then(() => {
+        dispatch({ type: 'add-client', payload: { client: { id: client.id, ...client.data } } })
+        setLoading(false)
+        setOpenModal(false)
+      })
       .catch(error => {
-        console.log(error)
         setLoading(false)
       })
   }

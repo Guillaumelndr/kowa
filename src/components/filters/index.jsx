@@ -4,6 +4,8 @@ import { css, cx } from '@emotion/css'
 
 import { StarOutlined, StarFilled } from '@ant-design/icons'
 
+import _ from 'lodash'
+
 const { Search } = Input
 const { Option } = Select
 
@@ -15,6 +17,8 @@ const Filters = ({ onSearch, onTypeChange, onSwitchChange }) => {
     onTypeChange(t)
   }
 
+  const debounced = _.debounce(e => onSearch(e.target.value), 300)
+
   return (
     <div className={cx('center', css`width: 100%`)}>
       <Space className={css`width: fit-content;`} align="center">
@@ -24,7 +28,7 @@ const Filters = ({ onSearch, onTypeChange, onSwitchChange }) => {
             <Option value="téléphone">Téléphone</Option>
             <Option value="email">Email</Option>
           </Select>
-          <Search placeholder={`Rechercher par ${type}`} style={{ width: 250 }} onSearch={q => onSearch(q)} allowClear />
+          <Search placeholder={`Rechercher par ${type}`} style={{ width: 250 }} onSearch={q => onSearch(q)} allowClear onChange={debounced} />
         </Input.Group>
         <Tooltip placement="bottom" title="favoris">
           <Switch

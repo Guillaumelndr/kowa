@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react'
-import { Space, Typography, Button, Tooltip } from "antd"
+import { Space, Typography, Button, Tooltip, Popconfirm } from "antd"
 import _ from 'lodash'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { DeleteOutlined, StarOutlined, EditOutlined, StarFilled } from '@ant-design/icons'
 import { firebaseContext } from '../../context/firebase'
+import { clientsContext } from '../../context/clients'
 const { Text, Link } = Typography
 
 export const columns = [
@@ -34,6 +35,7 @@ export const columns = [
     render: data => {
       const { favoris, id } = data
       const { api } = useContext(firebaseContext)
+      const { dispatch, mutate } = useContext(clientsContext)
 
       const [isFavoris, setIsFavoris] = useState(favoris || false)
       const [loading, setLoading] = useState({
@@ -51,10 +53,27 @@ export const columns = [
         api.setClient(id, { ...data, favoris: !isFavoris })
           .then(() => {
             setIsFavoris(!isFavoris)
+            !!isFavoris && mutate()
             setLoading({
               ...loading,
               favoris: false,
             })
+          })
+      }
+
+      const handleDelete = () => {
+        setLoading({
+          ...loading,
+          delete: true,
+        })
+
+        api.deleteClient(id)
+          .then(() => {
+            setLoading({
+              ...loading,
+              delete: false,
+            })
+            dispatch({ type: 'delete-client', payload: { uuid: id } })
           })
       }
 
@@ -65,7 +84,11 @@ export const columns = [
               ? <Button icon={<StarFilled />} style={{ color: '#fad314', borderColor: '#fad314' }} onClick={setfavoris} loading={loading.favoris} />
               : <Tooltip title="Ajouter au favoris" placement="left"><Button icon={<StarOutlined />} onClick={setfavoris} loading={loading.favoris} /></Tooltip>
           }
-          <Tooltip title="Supprimer le profil du patient" placement="bottom"><Button danger icon={<DeleteOutlined />} loading={loading.delete} /></Tooltip>
+          <Popconfirm title="êtes-vous sûr de vouloir supprimer ?" okText="Oui" cancelText="Non" onConfirm={handleDelete}>
+            <Tooltip title="Supprimer le profil du patient" placement="bottom">
+              <Button danger icon={<DeleteOutlined />} loading={loading.delete} />
+            </Tooltip>
+          </Popconfirm>
           <Tooltip title="Editer le profil du patient" placement="top"><Button type="dashed" icon={<EditOutlined />} loading={loading.edit} /></Tooltip>
         </Space >
       )
