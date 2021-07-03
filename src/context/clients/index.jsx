@@ -9,7 +9,6 @@ const deleteClient = (uuid, state) => {
 }
 
 const reducer = (state, action) => {
-  console.log(action)
   switch (action.type) {
     case 'update':
       return { ...action.payload }

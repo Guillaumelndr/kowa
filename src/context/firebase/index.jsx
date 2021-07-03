@@ -32,7 +32,7 @@ const FirebaseProvider = ({ children }) => {
     getUserToken: () => firebase.auth().currentUser.getIdToken(),
     clients: () => db.collection("clients"),
     setClient: (uuid, data) => db.collection("clients").doc(uuid).set(data),
-    deleteClient: uuid => db.collection("clients").doc(uuid).delete()
+    deleteClient: uuid => db.collection("clients").doc(uuid).delete(),
   }
 
 

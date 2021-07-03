@@ -24,7 +24,14 @@ const ClientsList = ({ query, fav }) => {
     fav && mutate()
   }, [fav])
   return (
-    <Table columns={columns} dataSource={clientFilters(clients, query)} loading={loading} rowKey="id" size="small" style={{ padding: 16 }} />
+    <Table
+      columns={columns}
+      dataSource={clientFilters(clients, query)}
+      loading={loading}
+      rowKey="id"
+      size="small"
+      style={{ padding: 16 }}
+    />
   )
 }
 

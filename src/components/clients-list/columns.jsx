@@ -1,10 +1,15 @@
 import React, { useContext, useState } from 'react'
-import { Space, Typography, Button, Tooltip, Popconfirm } from "antd"
+import { Space, Typography, Button, Tooltip, Popconfirm, Modal } from "antd"
+
 import _ from 'lodash'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { DeleteOutlined, StarOutlined, EditOutlined, StarFilled } from '@ant-design/icons'
+
 import { firebaseContext } from '../../context/firebase'
 import { clientsContext } from '../../context/clients'
+
+import ClientForm from '../client-form'
+
 const { Text, Link } = Typography
 
 export const columns = [
@@ -38,6 +43,7 @@ export const columns = [
       const { dispatch, mutate } = useContext(clientsContext)
 
       const [isFavoris, setIsFavoris] = useState(favoris || false)
+      const [openModal, setOpenModal] = useState(false)
       const [loading, setLoading] = useState({
         favoris: false,
         delete: false,
@@ -77,20 +83,62 @@ export const columns = [
           })
       }
 
+      const handleEdit = editData => {
+        setLoading({
+          ...loading,
+          edit: true,
+        })
+
+        api.setClient(id, {
+          nom: editData.nom,
+          prenom: editData.prenom,
+          tel_dom: editData?.tel_dom || '',
+          tel_port: editData?.tel_port || '',
+          mail: editData?.mail || ''
+        })
+          .then(() => {
+            setLoading({
+              ...loading,
+              edit: false,
+            })
+            setOpenModal(false)
+            mutate()
+          })
+      }
+
+
+      const submitbtn = (
+        <Button type="primary" htmlType="submit" style={{ width: '100%' }} loading={loading.edit}>
+          Editer
+        </Button>
+      )
+
       return (
-        <Space>
-          {
-            isFavoris
-              ? <Button icon={<StarFilled />} style={{ color: '#fad314', borderColor: '#fad314' }} onClick={setfavoris} loading={loading.favoris} />
-              : <Tooltip title="Ajouter au favoris" placement="left"><Button icon={<StarOutlined />} onClick={setfavoris} loading={loading.favoris} /></Tooltip>
-          }
-          <Popconfirm title="êtes-vous sûr de vouloir supprimer ?" okText="Oui" cancelText="Non" onConfirm={handleDelete}>
-            <Tooltip title="Supprimer le profil du patient" placement="bottom">
-              <Button danger icon={<DeleteOutlined />} loading={loading.delete} />
+        <>
+          <Space>
+            {
+              isFavoris
+                ? <Button icon={<StarFilled />} style={{ color: '#fad314', borderColor: '#fad314' }} onClick={setfavoris} loading={loading.favoris} />
+                : <Tooltip title="Ajouter au favoris" placement="left"><Button icon={<StarOutlined />} onClick={setfavoris} loading={loading.favoris} /></Tooltip>
+            }
+            <Popconfirm title="êtes-vous sûr de vouloir supprimer ?" okText="Oui" cancelText="Non" onConfirm={handleDelete}>
+              <Tooltip title="Supprimer le profil du patient" placement="bottom">
+                <Button danger icon={<DeleteOutlined />} loading={loading.delete} />
+              </Tooltip>
+            </Popconfirm>
+            <Tooltip title="Editer le profil du patient" placement="top">
+              <Button type="dashed" icon={<EditOutlined />} onClick={() => setOpenModal(true)} />
             </Tooltip>
-          </Popconfirm>
-          <Tooltip title="Editer le profil du patient" placement="top"><Button type="dashed" icon={<EditOutlined />} loading={loading.edit} /></Tooltip>
-        </Space >
+          </Space >
+          <Modal
+            visible={openModal}
+            onCancel={() => setOpenModal(false)}
+            title="Editer un patient."
+            footer={false}
+          >
+            <ClientForm submitButton={submitbtn} onFinish={handleEdit} initialValues={data} />
+          </Modal>
+        </>
       )
     }
   }
