@@ -25,7 +25,8 @@ const FirebaseProvider = ({ children }) => {
     authenticated: false,
     loading: true,
   })
-  const email = 'guillaumelandre101@gmail.com'
+  const email = 'docteurkowalewski@orange.fr'
+
   const api = {
     signIn: (password) => firebase.auth().signInWithEmailAndPassword(email, password),
     signOut: () => firebase.auth().signOut(),

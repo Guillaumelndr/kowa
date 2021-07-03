@@ -19,7 +19,7 @@ export const columns = [
     render: ({ nom, prenom }) => <Space size={6}><Text strong>{nom.toUpperCase()}</Text><Text>{_.capitalize(prenom)}</Text></Space>
   },
   {
-    title: 'Télépone',
+    title: 'Téléphone',
     key: 'name',
     render: ({ tel_dom, tel_port }) => (
       <Space>
